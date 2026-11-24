@@ -313,7 +313,8 @@
       btn.dataset.letter = entry.letter;
       btn.style.setProperty('--rot', `${(Math.random() * 10 - 5).toFixed(1)}deg`);
       btn.style.setProperty('--dy', `${(Math.random() * 10 - 5).toFixed(1)}px`);
-      btn.setAttribute('aria-label', `حرف ${entry.letter}`);
+      // الاسم المسموع لازم يحتوي النص الظاهر (شكل الحرف بالتطويل) عشان قارئ الشاشة
+      btn.setAttribute('aria-label', `حرف ${entry.initial}`);
       btn.addEventListener('click', () => chooseLetter(entry.letter, btn));
       el.letters.appendChild(btn);
     });
