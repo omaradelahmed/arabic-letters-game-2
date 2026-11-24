@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>وين الحرف؟ — حروفي ٢</title>
+  <meta name="description" content="لعبة تعليمية للأطفال من 3 إلى 6 سنوات: بص على الصورة واختار أول حرف للكلمة من الحروف المنتشرة." />
+  <meta name="theme-color" content="#17a58c" />
+  <link rel="icon" href="./icons/favicon-32.png" sizes="32x32" type="image/png" />
+  <link rel="icon" href="./icons/icon-192.png" sizes="192x192" type="image/png" />
+  <link rel="apple-touch-icon" href="./icons/apple-touch-icon.png" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="وين الحرف؟" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="app" class="app">
+
+    <header class="hud">
+      <div class="hud-chip" aria-live="polite">
+        <span class="hud-label">النقاط</span>
+        <b id="score">0</b>
+      </div>
+      <div class="hud-chip hud-best">
+        <span class="hud-label">أفضل نتيجة</span>
+        <b id="best">0</b>
+      </div>
+      <button id="soundBtn" class="icon-btn" type="button" aria-label="إيقاف الصوت">🔊</button>
+    </header>
+
+    <div class="timer">
+      <span class="timer-icon" aria-hidden="true">⏱</span>
+      <div class="timer-track">
+        <div class="timer-fill" id="timerFill" data-state="ok"></div>
+      </div>
+      <span class="timer-text" id="timerText" role="timer" aria-label="الوقت المتبقي">1:00</span>
+    </div>
+
+    <main class="stage">
+      <div class="sky" aria-hidden="true">
+        <div class="sun"></div>
+        <div class="cloud cloud-a"></div>
+        <div class="cloud cloud-b"></div>
+        <div class="cloud cloud-c"></div>
+      </div>
+
+      <p class="prompt">إيه أول حرف في الكلمة؟</p>
+
+      <div class="picture-card" id="pictureCard">
+        <span class="picture-emoji" id="pictureEmoji" aria-hidden="true">🍚</span>
+        <span class="check-badge" id="checkBadge" aria-hidden="true">✓</span>
+        <button class="speak-btn" id="speakBtn" type="button" aria-label="اسمع الكلمة تاني">🔈</button>
+      </div>
+
+      <div class="letters" id="letters" role="group" aria-label="اختار أول حرف"></div>
+    </main>
+
+    <div class="overlay" id="startOverlay">
+      <div class="card">
+        <div class="card-emoji" aria-hidden="true">🔎</div>
+        <h1>وين الحرف؟</h1>
+        <p class="card-sub">حروفي ٢</p>
+        <p class="card-text">بص على الصورة، اسمع الكلمة، واختار أول حرف من الحروف اللي تحت.</p>
+        <p class="card-note">⏱ دقيقة واحدة لكل صورة</p>
+        <button class="big-btn" id="playBtn" type="button">ابدأ اللعب</button>
+        <p class="card-note">للأعمار 3–6 · يشتغل بدون إنترنت بعد أول فتح</p>
+      </div>
+    </div>
+
+    <div class="overlay hidden" id="timeOverlay">
+      <div class="card">
+        <div class="card-emoji" aria-hidden="true">⏰</div>
+        <h2>الوقت خلص</h2>
+        <p class="card-text">حاول تاني — إنت تقدر!</p>
+        <div class="score-big">
+          <span>نقاطك</span>
+          <b id="finalScore">0</b>
+        </div>
+        <button class="big-btn" id="againBtn" type="button">حاول تاني</button>
+      </div>
+    </div>
+
+    <div class="confetti" id="confetti" aria-hidden="true"></div>
+  </div>
+
+  <script src="./game.js"></script>
+</body>
+</html>
