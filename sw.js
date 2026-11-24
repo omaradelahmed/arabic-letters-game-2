@@ -3,7 +3,7 @@
  * لو نشرت نسخة جديدة، غيّر رقم CACHE_VERSION.
  */
 
-const CACHE_VERSION = 'hurouf2-v2';
+const CACHE_VERSION = 'hurouf2-v3';
 
 const APP_SHELL = [
   './',
@@ -18,13 +18,29 @@ const APP_SHELL = [
   './icons/favicon-32.png',
 ];
 
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches
-      .open(CACHE_VERSION)
-      .then((cache) => cache.addAll(APP_SHELL))
-      .then(() => self.skipWaiting())
+// بنجيب كل ملف من الشبكة متجاهلين كاش المتصفح، عشان النسخة الجديدة
+// متخزّنش ملفات قديمة (GitHub Pages بيدي الملفات كاش 10 دقايق).
+async function precache() {
+  const cache = await caches.open(CACHE_VERSION);
+  await Promise.all(
+    APP_SHELL.map(async (url) => {
+      try {
+        let response;
+        try {
+          response = await fetch(url, { cache: 'reload' });
+        } catch {
+          response = await fetch(url);
+        }
+        if (response && response.ok) await cache.put(url, response);
+      } catch {
+        /* ملف واحد فشل: نحاول تاني وقت الاستخدام، والباقي يفضل متخزّن */
+      }
+    })
   );
+}
+
+self.addEventListener('install', (event) => {
+  event.waitUntil(precache().then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', (event) => {
