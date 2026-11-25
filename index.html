@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>وين الحرف؟ — حروفي ٢</title>
-  <meta name="description" content="لعبة تعليمية للأطفال من 3 إلى 6 سنوات: بص على الصورة واختار أول حرف للكلمة من الحروف المنتشرة." />
+  <meta name="description" content="لعبة تعليمية للأطفال من 3 إلى 6 سنوات: بص على الصورة وكوّن الكلمة كلها من الحروف المنتشرة، حرف ورا حرف." />
   <meta name="theme-color" content="#17a58c" />
   <link rel="icon" href="./icons/favicon-32.png" sizes="32x32" type="image/png" />
   <link rel="icon" href="./icons/icon-192.png" sizes="192x192" type="image/png" />
@@ -45,7 +45,7 @@
         <div class="cloud cloud-c"></div>
       </div>
 
-      <p class="prompt">إيه أول حرف في الكلمة؟</p>
+      <p class="prompt">كوّن الكلمة — دوس على الحروف بالترتيب</p>
 
       <div class="picture-card" id="pictureCard">
         <span class="picture-emoji" id="pictureEmoji" aria-hidden="true">🍚</span>
@@ -53,7 +53,9 @@
         <button class="speak-btn" id="speakBtn" type="button" aria-label="اسمع الكلمة تاني">🔈</button>
       </div>
 
-      <div class="letters" id="letters" role="group" aria-label="اختار أول حرف"></div>
+      <div class="word-strip" id="wordStrip" role="group" aria-live="polite" aria-label="الكلمة اللي بتتكوّن"></div>
+
+      <div class="letters" id="letters" role="group" aria-label="حروف الكلمة"></div>
     </main>
 
     <div class="overlay" id="startOverlay">
@@ -61,8 +63,8 @@
         <div class="card-emoji" aria-hidden="true">🔎</div>
         <h1>وين الحرف؟</h1>
         <p class="card-sub">حروفي ٢</p>
-        <p class="card-text">بص على الصورة، اسمع الكلمة، واختار أول حرف من الحروف اللي تحت.</p>
-        <p class="card-note">⏱ دقيقة واحدة لكل صورة</p>
+        <p class="card-text">بص على الصورة، اسمع الكلمة، وكوّنها كلها من الحروف اللي تحت — حرف ورا حرف.</p>
+        <p class="card-note">⏱ دقيقة واحدة لكل كلمة</p>
         <button class="big-btn" id="playBtn" type="button">ابدأ اللعب</button>
         <p class="card-note">للأعمار 3–6 · يشتغل بدون إنترنت بعد أول فتح</p>
       </div>

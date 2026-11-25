@@ -68,7 +68,7 @@ def draw_poster(c: canvas.Canvas, qr_path: Path) -> None:
     c.setFont("Arabic-Bold", 42)
     c.drawCentredString(width / 2, top(36), ar("وين الحرف؟"))
     c.setFont("Arabic", 15)
-    c.drawCentredString(width / 2, top(45), ar("حروفي ٢ — اختار أول حرف للكلمة"))
+    c.drawCentredString(width / 2, top(45), ar("حروفي ٢ — كوّن الكلمة من حروفها"))
 
     c.setFillColor(NAVY)
     c.setFont("Arabic-Bold", 20)
@@ -86,7 +86,7 @@ def draw_poster(c: canvas.Canvas, qr_path: Path) -> None:
 
     bullets = [
         "مناسب للأطفال من 3 إلى 6 سنوات",
-        "دقيقة واحدة لكل صورة — ومؤقت واضح",
+        "دقيقة واحدة لكل كلمة — ومؤقت واضح",
         "يشتغل بدون إنترنت بعد أول فتح",
         "مجاني — بدون إعلانات ولا حسابات",
     ]

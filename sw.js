@@ -3,7 +3,7 @@
  * لو نشرت نسخة جديدة، غيّر رقم CACHE_VERSION.
  */
 
-const CACHE_VERSION = 'hurouf2-v3';
+const CACHE_VERSION = 'hurouf2-v4';
 
 const APP_SHELL = [
   './',

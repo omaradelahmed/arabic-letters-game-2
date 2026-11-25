@@ -1,6 +1,7 @@
 /*!
  * وين الحرف؟ — حروفي ٢
- * لعبة تعليمية للأطفال من 3 إلى 6 سنوات: الصورة + أول حرف بشكلـه في أول الكلمة.
+ * لعبة تعليمية للأطفال من 3 إلى 6 سنوات: بص على الصورة وكوّن الكلمة كلها
+ * من الحروف المنتشرة، حرف ورا حرف.
  * لا موسيقى: كل الأصوات مولّدة بـ WebAudio، والكلام عبر speechSynthesis.
  */
 (() => {
@@ -9,16 +10,6 @@
   /* ------------------------------------------------------------------ */
   /* البيانات                                                            */
   /* ------------------------------------------------------------------ */
-
-  // شكل الحرف في أول الكلمة (الحروف اللي مبتوصلش زي الراء بتفضل زي ما هي)
-  const LETTERS = [
-    { letter: 'ر', initial: 'ر' },
-    { letter: 'س', initial: 'سـ' },
-    { letter: 'خ', initial: 'خـ' },
-    { letter: 'ن', initial: 'نـ' },
-    { letter: 'ت', initial: 'تـ' },
-    { letter: 'ل', initial: 'لـ' },
-  ];
 
   const WORDS = [
     { letter: 'ر', word: 'رُز', emoji: '🍚' },
@@ -46,9 +37,12 @@
     { letter: 'ل', word: 'لِسان', emoji: '👅' },
   ];
 
-  const ROUND_MS = 60 * 1000; // دقيقة لكل صورة
+  // حروف زيادة بتظهر مع حروف الكلمة عشان الطفل يختار منها
+  const DISTRACTORS = ['ب', 'ج', 'ح', 'د', 'ز', 'ع', 'ف', 'ك', 'م', 'و', 'ي', 'ة', 'ا', 'ش', 'ص', 'ق'];
+
+  const ROUND_MS = 60 * 1000; // دقيقة لكل كلمة
   const STORAGE_KEY = 'hurouf2.v1';
-  const NEXT_ROUND_MS = 1350;
+  const NEXT_ROUND_MS = 1600;
 
   /* ------------------------------------------------------------------ */
   /* عناصر الصفحة                                                        */
@@ -65,6 +59,7 @@
     pictureCard: $('pictureCard'),
     pictureEmoji: $('pictureEmoji'),
     speakBtn: $('speakBtn'),
+    wordStrip: $('wordStrip'),
     letters: $('letters'),
     startOverlay: $('startOverlay'),
     timeOverlay: $('timeOverlay'),
@@ -82,6 +77,9 @@
     sound: true,
     lastLetter: '',
     round: null,
+    clusters: [], // حروف الكلمة، كل حرف مع حركته
+    needed: [], // الحروف المطلوبة بالترتيب
+    revealed: 0, // عدد الحروف اللي اتكتبت
   };
 
   /* ------------------------------------------------------------------ */
@@ -148,6 +146,9 @@
   const sfx = {
     tap() {
       tone({ freq: 640, dur: 0.07, type: 'triangle', vol: 0.07 });
+    },
+    letter(step = 0) {
+      tone({ freq: 520 + step * 90, dur: 0.1, type: 'triangle', vol: 0.09 });
     },
     correct() {
       [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
@@ -285,6 +286,24 @@
   }
 
   /* ------------------------------------------------------------------ */
+  /* تقسيم الكلمة لحروف                                                  */
+  /* ------------------------------------------------------------------ */
+
+  // الحركات والتطويل بيلزقوا في الحرف اللي قبلهم
+  const MARK_RE = /[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED\u0640]/;
+
+  function splitClusters(word) {
+    const out = [];
+    for (const ch of word) {
+      if (MARK_RE.test(ch) && out.length) out[out.length - 1] += ch;
+      else out.push(ch);
+    }
+    return out;
+  }
+
+  const baseOf = (cluster) => cluster[0];
+
+  /* ------------------------------------------------------------------ */
   /* منطق الجولات                                                        */
   /* ------------------------------------------------------------------ */
 
@@ -303,19 +322,44 @@
     el.best.textContent = String(state.best);
   }
 
+  // الكلمة اللي بتتكوّن + المربعات الفاضية
+  function renderWordStrip() {
+    el.wordStrip.textContent = '';
+
+    const written = document.createElement('span');
+    written.className = 'word-part';
+    written.textContent = state.clusters.slice(0, state.revealed).join('');
+    el.wordStrip.appendChild(written);
+
+    for (let i = state.revealed; i < state.clusters.length; i += 1) {
+      const slot = document.createElement('span');
+      slot.className = 'word-slot';
+      if (i === state.revealed) slot.classList.add('next');
+      el.wordStrip.appendChild(slot);
+    }
+  }
+
+  // الحروف المنتشرة: حروف الكلمة + شوية حروف زيادة
   function renderLetters() {
     el.letters.textContent = '';
-    shuffle(LETTERS.slice()).forEach((entry) => {
+
+    const tiles = state.needed.map((letter) => ({ letter, extra: false }));
+
+    const used = new Set(state.needed);
+    const extraPool = DISTRACTORS.filter((letter) => !used.has(letter));
+    const extras = shuffle(extraPool.slice()).slice(0, 2);
+    extras.forEach((letter) => tiles.push({ letter, extra: true }));
+
+    shuffle(tiles).forEach((tile) => {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'letter-btn';
-      btn.textContent = entry.initial;
-      btn.dataset.letter = entry.letter;
+      btn.textContent = tile.letter;
+      btn.dataset.letter = tile.letter;
       btn.style.setProperty('--rot', `${(Math.random() * 10 - 5).toFixed(1)}deg`);
       btn.style.setProperty('--dy', `${(Math.random() * 10 - 5).toFixed(1)}px`);
-      // الاسم المسموع لازم يحتوي النص الظاهر (شكل الحرف بالتطويل) عشان قارئ الشاشة
-      btn.setAttribute('aria-label', `حرف ${entry.initial}`);
-      btn.addEventListener('click', () => chooseLetter(entry.letter, btn));
+      btn.setAttribute('aria-label', `حرف ${tile.letter}`);
+      btn.addEventListener('click', () => chooseLetter(tile.letter, btn));
       el.letters.appendChild(btn);
     });
   }
@@ -323,8 +367,12 @@
   function nextRound() {
     const pool = WORDS.filter((item) => item.letter !== state.lastLetter);
     const item = pick(pool.length ? pool : WORDS);
+
     state.round = item;
     state.lastLetter = item.letter;
+    state.clusters = splitClusters(item.word);
+    state.needed = state.clusters.map(baseOf);
+    state.revealed = 0;
     state.locked = false;
 
     el.pictureEmoji.textContent = item.emoji;
@@ -332,6 +380,7 @@
     void el.pictureCard.offsetWidth;
     el.pictureCard.classList.add('pop');
 
+    renderWordStrip();
     renderLetters();
     startTimer();
     speak([item.word]);
@@ -351,13 +400,22 @@
     }
   }
 
-  function onCorrect(btn) {
+  function onLetterPlaced(btn) {
+    btn.classList.add('used');
+    btn.disabled = true;
+    state.revealed += 1;
+    renderWordStrip();
+    sfx.letter(state.revealed);
+
+    if (state.revealed >= state.clusters.length) onWordComplete();
+  }
+
+  function onWordComplete() {
     state.locked = true;
     stopTimer();
 
-    btn.classList.add('correct');
     el.letters.querySelectorAll('.letter-btn').forEach((other) => {
-      if (other !== btn) other.classList.add('faded');
+      if (!other.classList.contains('used')) other.classList.add('faded');
     });
     el.pictureCard.classList.add('correct');
 
@@ -387,8 +445,10 @@
   }
 
   function chooseLetter(letter, btn) {
-    if (!state.playing || state.locked || !state.round) return;
-    if (letter === state.round.letter) onCorrect(btn);
+    if (!state.playing || state.locked) return;
+    const expected = state.needed[state.revealed];
+    if (!expected) return;
+    if (letter === expected) onLetterPlaced(btn);
     else onWrong(btn);
   }
 
