@@ -12,29 +12,31 @@
   /* ------------------------------------------------------------------ */
 
   const WORDS = [
-    { letter: 'ر', word: 'رُز', emoji: '🍚' },
-    { letter: 'ر', word: 'رَاديو', emoji: '📻' },
-    { letter: 'ر', word: 'رِجل', emoji: '🦵' },
+    { letter: 'أ', word: 'أَرُزّ', emoji: '🍚' },
 
-    { letter: 'س', word: 'سُكّر', emoji: '🍬' },
-    { letter: 'س', word: 'سَيّارة', emoji: '🚗' },
-    { letter: 'س', word: 'سِنجاب', emoji: '🐿️' },
+    { letter: 'ر', word: 'رُطَب', emoji: '🌴' },
+    { letter: 'ر', word: 'رَادْيُو', emoji: '📻' },
+    { letter: 'ر', word: 'رِجْل', emoji: '🦵' },
 
-    { letter: 'خ', word: 'خُبز', emoji: '🍞' },
-    { letter: 'خ', word: 'خَروف', emoji: '🐑' },
-    { letter: 'خ', word: 'خِيار', emoji: '🥒' },
+    { letter: 'س', word: 'سُكَّر', emoji: '🍬' },
+    { letter: 'س', word: 'سَيَّارَة', emoji: '🚗' },
+    { letter: 'س', word: 'سِنْجَاب', emoji: '🐿️' },
 
-    { letter: 'ن', word: 'نُجوم', emoji: '⭐' },
-    { letter: 'ن', word: 'نَملة', emoji: '🐜' },
-    { letter: 'ن', word: 'نِمر', emoji: '🐆' },
+    { letter: 'خ', word: 'خُبْز', emoji: '🍞' },
+    { letter: 'خ', word: 'خَرُوف', emoji: '🐑' },
+    { letter: 'خ', word: 'خِيَار', emoji: '🥒' },
 
-    { letter: 'ت', word: 'تُفاح', emoji: '🍎' },
+    { letter: 'ن', word: 'نُجُوم', emoji: '⭐' },
+    { letter: 'ن', word: 'نَمْلَة', emoji: '🐜' },
+    { letter: 'ن', word: 'نِمْر', emoji: '🐆' },
+
+    { letter: 'ت', word: 'تُفَّاح', emoji: '🍎' },
     { letter: 'ت', word: 'تَاج', emoji: '👑' },
-    { letter: 'ت', word: 'تِمساح', emoji: '🐊' },
+    { letter: 'ت', word: 'تِمْسَاح', emoji: '🐊' },
 
-    { letter: 'ل', word: 'لُعبة', emoji: '🧸' },
-    { letter: 'ل', word: 'لَيمون', emoji: '🍋' },
-    { letter: 'ل', word: 'لِسان', emoji: '👅' },
+    { letter: 'ل', word: 'لُعْبَة', emoji: '🧸' },
+    { letter: 'ل', word: 'لَيْمُون', emoji: '🍋' },
+    { letter: 'ل', word: 'لِسَان', emoji: '👅' },
   ];
 
   // حروف زيادة بتظهر مع حروف الكلمة عشان الطفل يختار منها
